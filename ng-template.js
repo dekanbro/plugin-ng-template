@@ -23,12 +23,11 @@ exports.translate = function translate( load ) {
     options = System.ngTemplatePlugin || {},
     url = resolveUrl( load.address, baseUrl );
 
-  return 'var url = ' +
+    return 'var url = ' +
     ( options.serverRelative ? "System.baseURL.replace(/^\\w+:\\/\\/[^\\/]*/,'')+" : '' ) +
-    "'" + url + "';" +
-    "require('angular').module('ng')" +
+    "'" + url + "'; " +
+    ( options.ngTemplateSkip ? '' : "require('angular').module('ng')" +
     ".run(['$templateCache', function(c) { c.put(" +
-      "url, '" +
-      santiseSource( load.source ) + "'); }]);" +
+    "url, '" + santiseSource( load.source ) + "'); }]); ") +
     'module.exports = { templateUrl: url };';
 };
